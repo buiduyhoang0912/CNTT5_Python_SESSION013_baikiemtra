@@ -1,20 +1,22 @@
 check = 0 
 danhsach = []
+current_id = 101
+
 while check != 5 :
     print("="*75)
-    print("QUẢN LÝ NHÂN SỰ -STAFF MANAGER")
+    print("QUẢN LÝ NHÂN SỰ - STAFF MANAGER")
     print("="*75)
     print(
 """
 1. Thêm nhân viên mới
 2. Danh sách nhân viên
-3. Tìm kiêm nhân viên (theo mã)
-4. Xóa nhân viên khỏi hệ thông
+3. Tìm kiếm nhân viên (theo mã)
+4. Xóa nhân viên khỏi hệ thống
 5. Thoát chương trình
 """
     )
     print("="*75)
-    check = input("Nhập lựa chọn của bạn : ")
+    check = input("Nhập lựa chọn của bạn : ").strip()
     match check : 
         case "1": 
             while True : 
@@ -28,67 +30,74 @@ while check != 5 :
                 luong = input("Nhập mức lương của bạn : ").strip()
                 if luong == "" :
                     print("Lương không được để trống ! Vui lòng nhập lại")
-                elif not luong.isdigit() :
-                    print("Lương nhập không hợp lệ ! Vui lòng nhập lại ")
-                else : 
-                    luong = float(luong)
-                    break 
+                else:
+                    try:
+                        luong = float(luong)
+                        if luong <= 0:
+                            print("Mức lương phải là số dương (> 0) ! Vui lòng nhập lại")
+                        else:
+                            break
+                    except ValueError:
+                        print("Lương nhập không hợp lệ ! Vui lòng nhập lại")
 
-            new ={
-                "Tên Nhân Viên" : ten,
-                "Mức Lương" : luong
+            new = {
+                'id': current_id,
+                'name': ten,
+                'salary': luong
             }
             danhsach.append(new)
+            print(f"Thêm nhân viên thành công! ID: {current_id}")
+            current_id += 1
+            
         case "2" : 
             if len(danhsach) == 0 :
                 print("Chưa có dữ liệu nhân sự!")
             else : 
-                print(f"{'ID' :<4} | {'Tên Nhân Viên' :<10} | {'Mức Lương' :6}")
-                for i, j in enumerate(danhsach,start=1) : 
-                    print(f"{100 + int(i) :<4} | {j['Tên Nhân Viên'] :<10} | {j['Mức Lương'] :6}")
+                print(f"{'ID' :<5} | {'Tên Nhân Viên' :<20} | {'Mức Lương' :<10}")
+                print("-" * 45)
+                for j in danhsach : 
+                    print(f"{j['id'] :<5} | {j['name'] :<20} | {j['salary'] :<10}")
 
         case "3" : 
             while True : 
-                timid = input("Nhập ID ần tìm kiếm : ").strip()
+                timid = input("Nhập ID cần tìm kiếm : ").strip()
                 if timid == "" :
                     print("ID không được để trống ! Vui lòng nhập lại ")
                 elif not timid.isdigit():
-                    print("ID khôgn hợp lệ ! Vui lòng nhập lại")
+                    print("ID không hợp lệ ! Vui lòng nhập lại")
                 else : 
                     timid = int(timid)
                     break
             
-            for i,j in enumerate(danhsach,start =1) : 
-                i = 100 + int(i)
-                if i == timid : 
-                    print(f'Thông tin nhân viên')
-                    print(f"'id' : {i} ,{j}")
+            for j in danhsach : 
+                if j['id'] == timid : 
+                    print("Thông tin chi tiết:")
+                    print(j)
                     break 
             else : 
-                print("Không tìm thấy nhân viên ")
+                print(f"Không tìm thấy nhân viên có ID {timid}!")
         
         case "4" : 
             while True : 
-                timid = input("Nhập ID ần tìm kiếm : ").strip()
+                timid = input("Nhập ID nhân viên cần xóa : ").strip()
                 if timid == "" :
                     print("ID không được để trống ! Vui lòng nhập lại ")
                 elif not timid.isdigit():
-                    print("ID khôgn hợp lệ ! Vui lòng nhập lại")
+                    print("ID không hợp lệ ! Vui lòng nhập lại")
                 else : 
                     timid = int(timid)
                     break
-            for i,j in enumerate(danhsach,start =1) : 
-                i = 100 + int(i)
-                if i == timid : 
+                    
+            for j in danhsach : 
+                if j['id'] == timid : 
                     danhsach.remove(j)
-                    print(f"Đã xóa thành công nhân viên ID {i} thành công !")
+                    print(f"Đã xóa nhân viên ID {timid} thành công!")
                     break 
             else : 
-                print("Không tìm thấy nhân viên ")
+                print("Không tìm thấy nhân viên để xóa!")
         
         case "5" :
             print("Kết thúc chương trình")
             break 
         case _:
-            print("Lựa chọn không hợp lệ ! VUi lòng nhập lại ")
-
+            print("Lựa chọn không hợp lệ ! Vui lòng nhập lại ")
